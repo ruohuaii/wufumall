@@ -2,8 +2,9 @@ package v1
 
 import (
 	"context"
+	"github.com/ruohuaii/wufumall/interfaces/api"
 
-	"github.com/ruohuaii/wufumall/application"
+	"github.com/ruohuaii/wufumall/application/service"
 	model "github.com/ruohuaii/wufumall/interfaces/model/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -17,25 +18,27 @@ import (
 **/
 
 type User struct {
-	userApp application.UserAppInterface
+	userApp service.UserAppInterface
+	api.Wrapper
 }
 
-func NewUser(userApp application.UserAppInterface) *User {
+func NewUser(userApp service.UserAppInterface) *User {
 	return &User{userApp: userApp}
 }
 
-func (u *User) SignUp(c context.Context, ctx *app.RequestContext) {
+func (u *User) SignUp(c context.Context, ctx *app.RequestContext) (any, error) {
 	request := model.SignUpRequest{}
 	err := ctx.BindAndValidate(&request)
 	if err != nil {
-		ctx.JSON(200, err.Error())
-		return
+		return nil, err
 	}
 
-	ctx.JSON(200, map[string]string{
-		"name": "hhs",
-		"msg":  "注册成功",
-	})
+	type Output struct {
+		Name string `json:"name"`
+		Age  int    `json:"age"`
+	}
+
+	return &Output{Name: "hhs", Age: 18}, nil
 }
 
 func (u *User) SignIn() {

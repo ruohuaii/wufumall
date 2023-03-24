@@ -1,10 +1,9 @@
 package main
 
 import (
+	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/ruohuaii/wufumall/infrastructure/persistence"
 	apiv1 "github.com/ruohuaii/wufumall/interfaces/api/v1"
-
-	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
 /**
@@ -31,11 +30,10 @@ func main() {
 	}
 
 	svr := server.New()
-
 	v1 := svr.Group("/v1")
 	{
 		user := apiv1.NewUser(repositories.UserRepo)
-		v1.GET("/signup", user.SignUp)
+		v1.GET("/signup", user.WrapperHandler(user.SignUp))
 	}
 
 	svr.Spin()
