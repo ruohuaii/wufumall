@@ -2,12 +2,11 @@ package v1
 
 import (
 	"context"
-	"github.com/ruohuaii/wufumall/interfaces/api"
-
-	"github.com/ruohuaii/wufumall/application/service"
-	model "github.com/ruohuaii/wufumall/interfaces/model/user"
+	"errors"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/ruohuaii/wufumall/application"
+	model "github.com/ruohuaii/wufumall/interfaces/model/user"
 )
 
 /**
@@ -18,19 +17,18 @@ import (
 **/
 
 type User struct {
-	userApp service.UserAppInterface
-	api.Wrapper
+	userApp application.UserAppInterface
 }
 
-func NewUser(userApp service.UserAppInterface) *User {
+func NewUser(userApp application.UserAppInterface) *User {
 	return &User{userApp: userApp}
 }
 
 func (u *User) SignUp(c context.Context, ctx *app.RequestContext) (any, error) {
 	request := model.SignUpRequest{}
 	err := ctx.BindAndValidate(&request)
-	if err != nil {
-		return nil, err
+	if err == nil {
+		return nil, errors.New("这是我定义的错误")
 	}
 
 	type Output struct {
@@ -42,5 +40,5 @@ func (u *User) SignUp(c context.Context, ctx *app.RequestContext) (any, error) {
 }
 
 func (u *User) SignIn() {
-
+	
 }

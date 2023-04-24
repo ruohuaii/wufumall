@@ -25,13 +25,12 @@ func NewUserRepo(db *gorm.DB) *UserRepo {
 }
 
 func (r *UserRepo) Save(user *entity.User) error {
-	err := r.db.Create(user).Error
-	return err
+	return r.db.Create(user).Error
 }
 
-func (r *UserRepo) GetByUserName(username string) (*entity.User, error) {
+func (r *UserRepo) GetByUserId(userid uint64) (*entity.User, error) {
 	user := &entity.User{}
-	err := r.db.Where(&entity.User{UserName: username}).First(user).Error
+	err := r.db.Where(&entity.User{UserId: userid}).First(user).Error
 	if err != nil {
 		return nil, err
 	}

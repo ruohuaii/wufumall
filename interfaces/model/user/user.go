@@ -8,6 +8,9 @@ package user
 **/
 
 type SignUpRequest struct {
+	LastName  string
+	FirstName string
+	Birthday  string
 }
 
 type SignInRequest struct {

@@ -5,7 +5,6 @@ import (
 
 	"github.com/ruohuaii/wufumall/domain/entity"
 	"github.com/ruohuaii/wufumall/domain/repository"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -19,8 +18,9 @@ import (
 **/
 
 type Repositories struct {
-	UserRepo repository.UserRepository
-	db       *gorm.DB
+	UserRepo          repository.UserRepository
+	RequestRecordRepo repository.RequestRecordRepository
+	db                *gorm.DB
 	schema.NamingStrategy
 }
 
@@ -41,13 +41,14 @@ func NewRepositories(DbUser, DbPassword, DbHost, DbPort, DbName string) (*Reposi
 	}
 
 	return &Repositories{
-		UserRepo: NewUserRepo(db),
-		db:       db,
+		UserRepo:          NewUserRepo(db),
+		RequestRecordRepo: NewRequestRecordRepo(db),
+		db:                db,
 	}, nil
 }
 
 func (s *Repositories) AutoMigrate() error {
-	return s.db.AutoMigrate(&entity.User{})
+	return s.db.AutoMigrate(&entity.User{}, &entity.RequestRecord{})
 }
 
 func (s *Repositories) TableName(table string) string {
